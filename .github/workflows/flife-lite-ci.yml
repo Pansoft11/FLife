@@ -1,0 +1,61 @@
+name: FLIFE Lite CI
+
+on:
+  push:
+    paths:
+      - "flife-lite/**"
+      - "FLife/**"
+      - ".github/workflows/flife-lite-ci.yml"
+  pull_request:
+    paths:
+      - "flife-lite/**"
+      - "FLife/**"
+      - ".github/workflows/flife-lite-ci.yml"
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install frontend dependencies
+        working-directory: flife-lite
+        run: npm ci
+      - name: Lint frontend and release checks
+        working-directory: flife-lite
+        run: npm run lint
+      - name: Typecheck frontend
+        working-directory: flife-lite
+        run: npm run typecheck
+      - name: Build frontend
+        working-directory: flife-lite
+        run: npm run build:report
+      - name: Install Python dependencies
+        run: python -m pip install -r flife-lite/python_engine/requirements.txt -e .
+      - name: Run Python tests
+        env:
+          PYTHONPATH: flife-lite/python_engine;flife-lite/src
+        run: pytest flife-lite/tests -p no:cacheprovider
+      - name: Build Tauri app
+        working-directory: flife-lite
+        run: npm run tauri:build
+      - name: Collect release artifacts
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path flife-lite/build/release | Out-Null
+          Get-ChildItem flife-lite/src-tauri/target/release -Filter "*.exe" -ErrorAction SilentlyContinue | Copy-Item -Destination flife-lite/build/release -Force
+          Get-ChildItem flife-lite/src-tauri/target/release/bundle -Recurse -File -ErrorAction SilentlyContinue | Copy-Item -Destination flife-lite/build/release -Force
+          Get-ChildItem flife-lite/build/release -File | ForEach-Object { Get-FileHash $_.FullName -Algorithm SHA256 } | Format-Table -AutoSize | Out-File flife-lite/build/release/checksums.sha256.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: flife-lite-windows
+          path: |
+            flife-lite/build/release/**
+            flife-lite/build/bundle-report.json
+            flife-lite/docs/release-notes.md

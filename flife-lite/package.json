@@ -1,0 +1,38 @@
+{
+  "name": "flife-lite",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc && vite build",
+    "build:report": "npm run build && node scripts/bundle-report.mjs",
+    "lint": "node scripts/static-check.mjs",
+    "typecheck": "tsc --noEmit",
+    "doctor:windows": "powershell -ExecutionPolicy Bypass -File scripts/doctor-windows.ps1",
+    "bootstrap:windows": "powershell -ExecutionPolicy Bypass -File scripts/bootstrap-windows.ps1",
+    "release:windows": "powershell -ExecutionPolicy Bypass -File scripts/release-windows.ps1",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.0.0",
+    "lucide-react": "^0.468.0",
+    "plotly.js-dist-min": "^2.35.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-plotly.js": "^2.6.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vitest": "^2.1.4"
+  }
+}

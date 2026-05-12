@@ -1,0 +1,7 @@
+FLIFE Lite End User License Agreement
+
+This preview license is provided for internal evaluation and client demonstration of FLIFE Lite.
+
+Do not distribute, reverse engineer, resell, or sublicense this software without written permission from FLIFE.
+
+Engineering results must be reviewed and approved by a qualified engineer before production use.

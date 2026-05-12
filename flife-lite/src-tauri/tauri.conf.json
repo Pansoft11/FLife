@@ -1,0 +1,59 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "FLIFE Lite",
+  "version": "0.1.0",
+  "identifier": "com.flife.lite",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:5173",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "FLIFE Lite",
+        "width": 1320,
+        "height": 860,
+        "minWidth": 1024,
+        "minHeight": 720,
+        "visible": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "category": "DeveloperTool",
+    "copyright": "Copyright FLIFE. All rights reserved.",
+    "licenseFile": "installer/license.txt",
+    "shortDescription": "Fatigue life prediction and durability assessment.",
+    "longDescription": "FLIFE Lite is an offline-first engineering durability workbench for fatigue life prediction, reporting, and licensed desktop deployment.",
+    "targets": ["nsis"],
+    "publisher": "FLIFE",
+    "windows": {
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "http://timestamp.digicert.com",
+      "signCommand": {
+        "cmd": "powershell",
+        "args": ["-ExecutionPolicy", "Bypass", "-File", "scripts/sign-windows.ps1", "%1"]
+      },
+      "nsis": {
+        "displayLanguageSelector": true,
+        "installMode": "both",
+        "languages": ["English"],
+        "installerHooks": "installer/nsis-hooks.nsh",
+        "compression": "lzma",
+        "startMenuFolder": "FLIFE"
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "active": false,
+      "endpoints": []
+    }
+  }
+}

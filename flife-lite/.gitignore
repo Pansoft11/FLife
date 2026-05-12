@@ -1,0 +1,12 @@
+node_modules/
+dist/
+src-tauri/target/
+.venv/
+build/test-artifacts/
+release/installer/
+release/portable/
+release/checksums/
+release/manifests/
+release/reports/
+*.sqlite3
+*.log

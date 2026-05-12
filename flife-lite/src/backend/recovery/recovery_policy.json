@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "location": "%LOCALAPPDATA%/FLIFE/recovery",
+  "autosave_interval_seconds": 60,
+  "max_snapshots": 20,
+  "quarantine_corrupted_projects": true
+}
