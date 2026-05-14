@@ -1,11 +1,12 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 
+const releaseRoot = process.env.FLIFE_RELEASE_ROOT ?? "build/release";
 const checks = [
-  ["Installer artifact", "release/installer/FLIFE-Lite-Setup.exe"],
-  ["Portable ZIP", "release/portable/FLIFE-Lite-Portable.zip"],
-  ["Checksums", "release/checksums/SHA256SUMS.txt"],
-  ["Release manifest", "release/manifests/release-manifest.json"],
-  ["Bundle report", "release/reports/bundle-report.json"],
+  ["Installer artifact", `${releaseRoot}/installer/FLIFE-Lite-Setup.exe`],
+  ["Portable ZIP", `${releaseRoot}/portable/FLIFE-Lite-Portable.zip`],
+  ["Checksums", `${releaseRoot}/checksums/SHA256SUMS.txt`],
+  ["Release manifest", `${releaseRoot}/manifests/release-manifest.json`],
+  ["Bundle report", `${releaseRoot}/reports/bundle-report.json`],
 ];
 
 const rows = checks.map(([name, path]) => ({ name, path, status: existsSync(path) ? "PASS" : "PENDING" }));
@@ -32,6 +33,6 @@ const body = [
   "- Crash dumps are written to `%LOCALAPPDATA%/FLIFE/crash-dumps/`.",
 ].join("\n");
 
-mkdirSync("release", { recursive: true });
-writeFileSync("release/RC1-validation-report.md", body);
+mkdirSync(releaseRoot, { recursive: true });
+writeFileSync(`${releaseRoot}/RC1-validation-report.md`, body);
 console.log("RC1 validation report generated.");

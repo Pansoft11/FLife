@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-$releaseRoot = "release"
+$releaseRoot = Join-Path "build" ("release-" + (Get-Date -Format "yyyyMMdd-HHmmss"))
 $installerDir = Join-Path $releaseRoot "installer"
 $portableDir = Join-Path $releaseRoot "portable"
 $checksumsDir = Join-Path $releaseRoot "checksums"
@@ -70,11 +70,15 @@ Copy-Item docs\release-notes.md (Join-Path $releaseRoot "release-notes.md") -For
 
 Compress-Archive -Path (Join-Path $portableDir "*") -DestinationPath (Join-Path $portableDir "FLIFE-Lite-Portable.zip") -Force
 
-Get-ChildItem $releaseRoot -Recurse -File | ForEach-Object {
+$checksumsFile = Join-Path $checksumsDir "SHA256SUMS.txt"
+Get-ChildItem $releaseRoot -Recurse -File |
+  Where-Object { $_.FullName -ne (Join-Path (Resolve-Path $checksumsDir) "SHA256SUMS.txt") } |
+  ForEach-Object {
   "{0}  {1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash, (Resolve-Path -Relative $_.FullName)
-} | Out-File (Join-Path $checksumsDir "SHA256SUMS.txt") -Encoding ascii
+} | Out-File $checksumsFile -Encoding ascii
 
 Write-Manifest "complete" "RC1 release artifacts generated."
 
+$env:FLIFE_RELEASE_ROOT = $releaseRoot.Replace("\", "/")
 node scripts/validate-release.mjs
 Write-Host "RC1 release artifacts generated under $releaseRoot"

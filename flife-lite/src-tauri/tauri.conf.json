@@ -36,10 +36,6 @@
     "windows": {
       "digestAlgorithm": "sha256",
       "timestampUrl": "http://timestamp.digicert.com",
-      "signCommand": {
-        "cmd": "powershell",
-        "args": ["-ExecutionPolicy", "Bypass", "-File", "scripts/sign-windows.ps1", "%1"]
-      },
       "nsis": {
         "displayLanguageSelector": true,
         "installMode": "both",
